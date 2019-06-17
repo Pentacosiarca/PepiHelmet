@@ -1,0 +1,9 @@
+{
+    "editor.fontFamily": "Fira Code Retina",
+    "editor.fontLigatures": true,
+    "editor.fontSize": 17,
+    "terminal.integrated.env.windows": {
+        "PATH": "C:\\Users\\alber\\.platformio\\penv\\Scripts;C:\\Users\\alber\\.platformio\\penv;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files\\Git\\cmd;C:\\Python\\Python373;C:\\ProgramData\\chocolatey\\bin;C:\\MinGW\\bin;C:\\Program Files\\dotnet\\;C:\\Python\\Python373\\Scripts\\;C:\\Python\\Python373\\;C:\\Users\\alber\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\alber\\AppData\\Local\\GitHubDesktop\\bin;C:\\Users\\alber\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files\\Git\\cmd;C:\\Python\\Python373;C:\\ProgramData\\chocolatey\\bin;C:\\MinGW\\bin;C:\\Program Files\\dotnet\\;C:\\Python\\Python373\\Scripts\\;C:\\Python\\Python373\\;C:\\Users\\alber\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\alber\\AppData\\Local\\GitHubDesktop\\bin;C:\\Users\\alber\\AppData\\Local\\Programs\\Microsoft VS Code\\bin",
+        "PLATFORMIO_CALLER": "vscode"
+    }
+}
