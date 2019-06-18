@@ -20,14 +20,16 @@
 #include <tools.h>
 int Xcoord_a, Ycoord_a, Zcoord_a;
 int Xcoord_b, Ycoord_b, Zcoord_b;
+char time_d_ms = 10;
 
 void setup(void) {
   #include <setupReg.h>
 }
 
 void loop(void){
-  XYZcoord coordinates(Xcoord_a, Ycoord_a, Zcoord_a);
-  XYZcoord coordinates(Xcoord_b, Ycoord_b, Zcoord_b);
+  XYZcoord coordinates_a(Xcoord_a, Ycoord_a, Zcoord_a);
+  delay(time_d_ms);
+  XYZcoord coordinates_b(Xcoord_b, Ycoord_b, Zcoord_b);
 
 
 }
