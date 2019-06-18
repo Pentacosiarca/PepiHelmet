@@ -17,29 +17,17 @@
 #define I2C_7BITADDR (0x19) // with SDO --> Vcc
 #define ADDRLEN 1        // address length, usually 1 or 2 bytes
 
-void setup(void) {
+#include <tools.h>
+int Xcoord_a, Ycoord_a, Zcoord_a;
+int Xcoord_b, Ycoord_b, Zcoord_b;
 
+void setup(void) {
   #include <setupReg.h>
 }
 
 void loop(void){
+  XYZcoord coordinates(Xcoord_a, Ycoord_a, Zcoord_a);
+  XYZcoord coordinates(Xcoord_b, Ycoord_b, Zcoord_b);
 
-  i2c_rep_start((I2C_7BITADDR<<1)|I2C_WRITE);
-  i2c_write(0xA8);
-  i2c_stop();
 
-  i2c_rep_start((I2C_7BITADDR<<1)|I2C_READ);
-  byte valZH = i2c_read(false);
-  byte valZL = i2c_read(false);
-  int Zpos = valZL | valZH << 8;
-
-  byte valYH = i2c_read(false);
-  byte valYL = i2c_read(false);
-  int Ypos = valYL | valYH << 8;
-
-  byte valXH = i2c_read(false);
-  byte valXL = i2c_read(true);
-  int Xpos = valXL | valXH << 8; 
-
-  delay(3000);
 }
