@@ -1,7 +1,8 @@
 /*
  * Use of the library SoftI2CMaster (https://github.com/felias-fogg/SoftI2CMaster.git) 
- * to control the accelerometer LIS3DH with the Attiny85.
- * Configuration bits follow the same pattern as in the accdemo example from Adafruit.
+ * to read accelerometer data from LIS3DH with the Attiny85.
+ * Configuration registers in the LIS3DH follow the same sequence
+ *  as in the accdemo example from Adafruit.
  */
 
 #include <Arduino.h>
@@ -18,8 +19,8 @@
 #define ADDRLEN 1        // address length, usually 1 or 2 bytes
 
 #include <tools.h>
-int Xcoord_a, Ycoord_a, Zcoord_a;
-int Xcoord_b, Ycoord_b, Zcoord_b;
+unsigned int coord_a[3];
+unsigned int coord_b[3];
 char time_d_ms = 10;
 
 void setup(void) {
@@ -27,9 +28,9 @@ void setup(void) {
 }
 
 void loop(void){
-  XYZcoord coordinates_a(Xcoord_a, Ycoord_a, Zcoord_a);
+  XYZcoord coordinates_a(coord_a);
   delay(time_d_ms);
-  XYZcoord coordinates_b(Xcoord_b, Ycoord_b, Zcoord_b);
+  XYZcoord coordinates_b(coord_b);
 
-
+  
 }
