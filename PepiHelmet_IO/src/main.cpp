@@ -7,6 +7,12 @@
 
 #include <Arduino.h>
 
+#include <Adafruit_NeoPixel.h>
+#define LED_PIN   3
+#define LED_COUNT 2
+// Declare our NeoPixel strip object:
+Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+
 #define I2C_TIMEOUT 1000
 #define I2C_PULLUP 1
 #define SDA_PORT PORTB
@@ -19,11 +25,15 @@
 #define ADDRLEN 1        // address length, usually 1 or 2 bytes
 
 #include <tools.h>
-unsigned int coord_a[3];
-unsigned int coord_b[3];
+int coord_a[3];
+int coord_b[3];
 char time_d_ms = 10;
 
 void setup(void) {
+  strip.begin();           // INITIALIZE NeoPixel strip object (REQUIRED)
+  strip.show();            // Turn OFF all pixels ASAP
+  strip.setBrightness(50); // Set BRIGHTNESS to about 1/5 (max = 255)
+
   #include <setupReg.h>
 }
 
@@ -32,5 +42,9 @@ void loop(void){
   delay(time_d_ms);
   XYZcoord coordinates_b(coord_b);
 
+  POperation vecoperator(coord_a,coord_b);
+  int moduleAB = vecoperator.Module();
+
+  
   
 }
