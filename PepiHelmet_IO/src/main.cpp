@@ -8,8 +8,8 @@
 #include <Arduino.h>
 
 #include <Adafruit_NeoPixel.h>
-#define LED_PIN   3
-#define LED_COUNT 2
+#define LED_PIN   1
+#define LED_COUNT 1
 // Declare our NeoPixel strip object:
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
@@ -25,9 +25,10 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 #define ADDRLEN 1        // address length, usually 1 or 2 bytes
 
 #include <tools.h>
-int coord_a[3];
-int coord_b[3];
 char time_d_ms = 10;
+
+int* max_vals = NULL;
+int* min_vals = NULL;
 
 void setup(void) {
   strip.begin();           // INITIALIZE NeoPixel strip object (REQUIRED)
@@ -38,13 +39,27 @@ void setup(void) {
 }
 
 void loop(void){
-  XYZcoord coordinates_a(coord_a);
+  
+
+  int* coord_a;
+  int* coord_b;
+  int* moduleAB;
+  
+  XYZcoord Coordinates_a;
+  coord_a = Coordinates_a.ReturnVector();
+  max_vals = Coordinates_a.ReturnMax();
+  min_vals = Coordinates_a.ReturnMin();
+  
   delay(time_d_ms);
-  XYZcoord coordinates_b(coord_b);
 
-  POperation vecoperator(coord_a,coord_b);
-  int moduleAB = vecoperator.Module();
+  XYZcoord Coordinates_b;
+  coord_b = Coordinates_b.ReturnVector();
+  max_vals = Coordinates_b.ReturnMax();
+  min_vals = Coordinates_b.ReturnMin();
+  
 
-  
-  
+  POperation Vecoperator(coord_a,coord_b);
+  moduleAB = Vecoperator.Module();
+
+  Sendcolour Sendcolour(moduleAB, coord_a, coord_b, max_vals, min_vals);
 }
