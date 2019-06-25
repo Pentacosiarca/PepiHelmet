@@ -25,10 +25,16 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 #define ADDRLEN 1        // address length, usually 1 or 2 bytes
 
 #include <tools.h>
-char time_d_ms = 10;
+int time_d_ms = 10;
+
+const int averageCTE = 10;
+const int dimensions = 3;
+int count = 0;
 
 int* max_vals = NULL;
 int* min_vals = NULL;
+
+int* coordArray = create2Darray(dimensions, averageCTE);
 
 void setup(void) {
   strip.begin();           // INITIALIZE NeoPixel strip object (REQUIRED)
@@ -36,30 +42,27 @@ void setup(void) {
   strip.setBrightness(50); // Set BRIGHTNESS to about 1/5 (max = 255)
 
   #include <setupReg.h>
+
 }
 
 void loop(void){
   
-
-  int* coord_a;
-  int* coord_b;
   int* moduleAB;
   
-  XYZcoord Coordinates_a;
-  coord_a = Coordinates_a.ReturnVector();
-  max_vals = Coordinates_a.ReturnMax();
-  min_vals = Coordinates_a.ReturnMin();
-  
-  delay(time_d_ms);
+  //delay(time_d_ms);
 
   XYZcoord Coordinates_b;
-  coord_b = Coordinates_b.ReturnVector();
+  Coordinates_b.ReturnVector(coordArray,dimensions,count);
   max_vals = Coordinates_b.ReturnMax();
   min_vals = Coordinates_b.ReturnMin();
   
+  count += 1;
+  if (count > 10){
+    count = 0;
 
-  POperation Vecoperator(coord_a,coord_b);
-  moduleAB = Vecoperator.Module();
+    POperation Vecoperator(coordArray,dimensions,count);
+    moduleAB = Vecoperator.Module();
 
-  Sendcolour Sendcolour(moduleAB, coord_a, coord_b, max_vals, min_vals);
+    Sendcolour Sendcolour(coordArray, max_vals, min_vals, moduleAB, dimensions, averageCTE);
+  }
 }

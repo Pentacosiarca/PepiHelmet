@@ -1,9 +1,9 @@
 class XYZcoord{
 private:
-    char valAH, valAL, valBH, valBL, valCH, valCL;
-    int coorda[3];
-    int maxval[3];
-    int minval[3];
+    int valAH, valAL, valBH, valBL, valCH, valCL;
+    int* coorda = new int[3];
+    int* maxval = new int[3];
+    int* minval = new int[3];
 public:
     XYZcoord(){
         i2c_rep_start((I2C_7BITADDR<<1)|I2C_WRITE);
@@ -24,9 +24,17 @@ public:
         coorda[2] = valCL | valCH << 8; //values range from -8000 to +8000, for 360deg in this axis
     }
 
-    int* ReturnVector(){
-        return coorda;
+    ~XYZcoord(){
+        delete[] coorda;
+        delete[] maxval;
+        delete[] minval;
     }
+
+    void ReturnVector(int* arr,const int& rows, int& count){
+        for(int i=0;i<rows;i++)
+            arr[i+rows*count] = coorda[i];
+    }
+
     int* ReturnMax(){
         if(coorda[0]>maxval[0])
             maxval[0]=coorda[0];
@@ -50,52 +58,77 @@ public:
 
 class POperation{
 private:
-    int pointa[3];
-    int pointb[3];
+    int* arr_a;
+    int* arr_b;
 
 public:
-    POperation(int* pointaa, int* pointba){
-        for(int i=0;i<3;i++){
-            pointa[i] = pointaa[i]; //sqrt(pow((pointaa[i] - pointba[i]),2));
-            //pointb[i] = pointba[i];
-        }
+    POperation(int* arra, const int& dimensions, int& count){
+        arr_a = new int[dimensions];
+        for(int i=0;i<dimensions;i++)
+            arr_a[i] = arra[i + (dimensions*count)];
+    }
+
+    ~POperation(){
+        delete[] arr_a;
+        delete[] arr_b;
     }
 
     int* Module(){
-        return pointa; //sqrt(pow((pointb[0]-pointa[0]),2)+pow((pointb[1]-pointa[1]),2)+pow((pointb[2]-pointa[2]),2));
+        return arr_a; //sqrt(pow((pointb[0]-pointa[0]),2)+pow((pointb[1]-pointa[1]),2)+pow((pointb[2]-pointa[2]),2));
     }
 };
 
 class Sendcolour{
 private:
-    int pointa[3];
-    int pointb[3];
-    int maxval[3];
-    int minval[3];
-    int module[3];
-    char red;
-    char green;
-    char blue;
+    int dim;
+    int aveCTE;
+    int* arr_a;
+    int* maxval = new int[3];
+    int* minval = new int[3];
+    int* module = new int[3];
+    int* averageArr = new int[3];
+    int red;
+    int green;
+    int blue;
 
 public:
-    Sendcolour(int* modulea, int* pointaa, int* pointba, int* maxvala, int* minvala){
-        for(int i=0;i<3;i++){
-            pointa[i] = pointaa[i];
-            pointb[i] = pointba[i];
+    Sendcolour(int* arraa, int* maxvala, int* minvala, int* modulea, const int dimensionsa, const int averageCTEa){
+        dim = dimensionsa;
+        aveCTE = averageCTEa;
+
+        arr_a = new int[dim * aveCTE];
+        for(int i=0;i<dim;i++){
+            for(int j=0;j<aveCTE;j++)
+                arr_a[ + i + (dim*j)] = arraa[i + (dim*j)];
             maxval[i] = maxvala[i];
             minval[i] = minvala[i];
             module[i] = modulea[i];
         }
-        //module = modulea;
+        AverageArr();
         PerformColour();
         Colour();
     }
 
+    ~Sendcolour(){
+        delete[] maxval;
+        delete[] minval;
+        delete[] module;
+        delete[] averageArr;
+        delete[] arr_a;
+    }
+
 private:
+    void AverageArr(){
+        for(int i=0;i<dim;i++){
+            for(int j=0;j<aveCTE;j++)
+                averageArr[i] += arr_a[i + (dim*j)]/aveCTE;
+        }
+    }
+
     void PerformColour(){
-        red = map(module[0],minval[0],maxval[0],0,255);
-        green = map(module[1],minval[1],maxval[1],0,255);
-        blue = map(module[2],minval[2],maxval[2],0,255);
+        red = map(averageArr[1],minval[1],maxval[1],0,255);
+        green = 10; //map(averageArr[1],minval[1],maxval[1],0,255);
+        blue = 10; //map(averageArr[2],minval[2],maxval[2],0,255);
     }
 
     void Colour(){
@@ -105,5 +138,11 @@ private:
         //delay(wait);           ,                //  Pause for a moment
     }
 };
+
+int* create2Darray(int rows, int columns) {
+	int* array2D = NULL;
+	array2D = new int [rows * columns];
+	return array2D;
+}
 
 
