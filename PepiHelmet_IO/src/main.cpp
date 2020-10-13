@@ -9,7 +9,7 @@
 
 #include <Adafruit_NeoPixel.h>
 #define LED_PIN   1
-#define LED_COUNT 5
+#define LED_COUNT 2
 // Declare our NeoPixel strip object:
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
@@ -31,10 +31,10 @@ int time_d_ms = 10;
 const int averageCTE = 10;
 const int dimensions = 3;
 
-long coordArray[dimensions][averageCTE] = {NULL};
+long coordArray[dimensions*averageCTE] = {NULL};
 int count = 0;
 
-long *ptrCoordArray = &coordArray[0][0];
+long *ptrCoordArray = &coordArray[0];
 
 long averageVal[dimensions] = {NULL};
 long minVal[dimensions] = {NULL};
@@ -59,9 +59,8 @@ void setup(void) {
 }
 
 void loop(void){
-
 // GET accel data and STORE
-  long *ptrCoordCount = &coordArray[0][count];
+  long *ptrCoordCount = &coordArray[dimensions*count];
   getXYZcoord(ptrCoordCount, ptrMax, ptrMin);
   
 // COMPUTE from array
@@ -73,8 +72,15 @@ void loop(void){
 // SEND rgb to neopixel
   sendColour(red, green, blue);
 
-
   count++;
-  if(count>averageCTE-1)count=0;
+  if(count>averageCTE-1){
+    count=0;
+   /*
+    strip.clear();
+    
+    strip.show();
+    strip.setBrightness(50);
+    */
+  }
 
 }
